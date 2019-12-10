@@ -15,7 +15,7 @@ const app = express()
 const port: string = process.env.PORT || '8080'
 
 app.use(session({
-  secret: 'my very secret phrase',
+  secret: 'my very secret phrase ',
   store: new LevelStore('./db/sessions'),
   resave: true,
   saveUninitialized: true
