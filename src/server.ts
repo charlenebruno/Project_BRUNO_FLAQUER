@@ -25,6 +25,15 @@ function savePopulate() {
 
           else {}
         })
+        element.timestamp.forEach((element2,index) => {
+          let tabMet: Metric[] = []
+          let met: Metric = new Metric(element2,element.value[index],element.username)
+          tabMet.push(met)
+
+          dbMet.save(element.id[index], tabMet, (err: Error | null) => {
+            if (err) throw err
+          })
+        })
       }
     }),
   )
