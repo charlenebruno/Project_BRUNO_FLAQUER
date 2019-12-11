@@ -50,13 +50,35 @@
               // The data for our dataset
               data: {
                   labels: timestmp,
+                  
+                  
                   datasets: [{
                       label: 'Metrics',
-                      backgroundColor: 'rgb(255,0,0)',
-                      borderColor: 'rgb(0, 50, 200)',
-                      data: val
+                      backgroundColor:'rgb(255, 0, 0)',
+                      borderColor: 'rgb(255, 99, 132)',
+                      data: val,
                   }]
               },
+
+              // Configuration options go here
+              options: {
+                scales: {
+                  xAxes: [{
+                    display: true,
+                    scaleLabel: {
+                      display: true,
+                      labelString: 'Timestamp'
+                    }
+                  }],
+                  yAxes: [{
+                    display: true,
+                    scaleLabel: {
+                      display: true,
+                      labelString: 'Value'
+                    }
+                  }]
+                }
+              }
             });
           });
         })        
