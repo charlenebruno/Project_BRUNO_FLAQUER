@@ -27,7 +27,7 @@ app.set('views', __dirname + "/view")
 app.set('view engine', 'ejs');
 
 app.use(bodyparser.json())
-app.use(bodyparser.urlencoded())
+app.use(bodyparser.urlencoded({extended: true}))
 
 
 const authCheck = function (req: any, res: any, next: any) {

@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+      <meta charset="utf-8">
       <% include partials/head %>
-  </head>
+      <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+    </head>
   <body class="container">
     <div class="col-md-6 col-md-offset-3">
       <h1>Hello <%= name %></h1>
@@ -16,26 +18,69 @@
         Delete a metric
       </button>
       <div id="metrics"></div>
-      </div> 
+      </div>
+      
+      <canvas id="myChart"></canvas>
+
       <script>
+        var a;
+
         $('#show-metrics').click((e) => {
             e.preventDefault();
             $.getJSON("/metrics/", {}, (data) => {
-            const content = data.map(d => {
-                return 'timestamp: '+d.timestamp+', value: '+d.value+'<br>';
-            })
-            $('#metrics').append(content.join("\n"));
+              const content = data.map(d => {
+                  return [d.timestamp,d.value];
+              })
+
+              console.log(content[0][0])
+
+              var timestmp=[];
+              var val=[];
+
+              for(var i=0; i<content.length; i++)
+              {
+                timestmp.push(content[i][0]);
+                val.push(content[i][1]);
+              }
+              
+              $('#metrics').append(content)
+              console.log(content[0][0])
+              console.log(val)
+              var ctx = document.getElementById('myChart').getContext('2d');
+              var chart = new Chart(ctx, {
+
+              // The type of chart we want to create
+              type: 'line',
+
+              // The data for our dataset
+              data: {
+                  labels: timestmp,
+                  datasets: [{
+                      label: 'Metrics',
+                      borderColor: 'rgb(255, 99, 132)',
+                      data: val
+                  }]
+              },
+
+              // Configuration options go here
+              options: {}
             });
+          });
+
+            
+            
         })
-    </script>
-    <button class="btn btn-danger" href="/logout" onClick='document.location.href="/logout"'>
-      Logout
-    </button>
-    <button class="btn btn-danger" href="/updatePassword" onClick='document.location.href="/updatePassword"'>
-      Change password
-    </button>
-    <button class="btn btn-danger" href="/delete" onClick='document.location.href="/delete"'>
-      Delete
-    </button>
+        
+        
+      </script>
+      <button class="btn btn-danger" href="/logout" onClick='document.location.href="/logout"'>
+        Logout
+      </button>
+      <button class="btn btn-danger" href="/updatePassword" onClick='document.location.href="/updatePassword"'>
+        Change password
+      </button>
+      <button class="btn btn-danger" href="/delete" onClick='document.location.href="/delete"'>
+        Delete
+      </button>
     </body>
 </html>
