@@ -23,17 +23,15 @@
       <canvas id="myChart"></canvas>
 
       <script>
-        var a;
-
         $('#show-metrics').click((e) => {
             e.preventDefault();
             $.getJSON("/metrics/", {}, (data) => {
+
+              // Fetch timestamps and values of metrics
               const content = data.map(d => {
-                  return [d.timestamp,d.value];
+                return [d.timestamp,d.value];
               })
-
-              console.log(content[0][0])
-
+              
               var timestmp=[];
               var val=[];
 
@@ -43,34 +41,25 @@
                 val.push(content[i][1]);
               }
               
-              $('#metrics').append(content)
-              console.log(content[0][0])
-              console.log(val)
               var ctx = document.getElementById('myChart').getContext('2d');
               var chart = new Chart(ctx, {
 
               // The type of chart we want to create
-              type: 'line',
+              type: 'bar',
 
               // The data for our dataset
               data: {
                   labels: timestmp,
                   datasets: [{
                       label: 'Metrics',
-                      borderColor: 'rgb(255, 99, 132)',
+                      backgroundColor: 'rgb(255,0,0)',
+                      borderColor: 'rgb(0, 50, 200)',
                       data: val
                   }]
               },
-
-              // Configuration options go here
-              options: {}
             });
           });
-
-            
-            
-        })
-        
+        })        
         
       </script>
       <button class="btn btn-danger" href="/logout" onClick='document.location.href="/logout"'>
@@ -83,4 +72,6 @@
         Delete
       </button>
     </body>
+    
 </html>
+

@@ -34,7 +34,6 @@ export class Metric {
       stream.end()
     }
 
-
     public getAll(callback: (error: Error | null, result: any) => void) {
       let metrics: Metric[] = []
       this.db.createReadStream()

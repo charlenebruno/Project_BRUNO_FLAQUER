@@ -5,14 +5,31 @@ import { MetricsHandler, Metric } from './metrics'
 import session = require('express-session')
 import levelSession = require('level-session-store')
 import { UserHandler, User } from './user'
+import population from './database/populate'
 
 const dbUser: UserHandler = new UserHandler('./db/users')
 const authRouter = express.Router()
 const LevelStore = levelSession(session)
 
-
 const app = express()
 const port: string = process.env.PORT || '8080'
+
+function savePopulate() {
+  
+  population.forEach(element => 
+    dbUser.get(element.username, function (err: Error | null, result?: User) {
+      if (!err || result !== undefined) {console.log(result)} 
+      else {
+        dbUser.save(element, function (err: Error | null) {
+          if (err) {}
+
+          else {}
+        })
+      }
+    }),
+  )
+};
+savePopulate();
 
 app.use(session({
   secret: 'my very secret phrase ',
@@ -28,7 +45,6 @@ app.set('view engine', 'ejs');
 
 app.use(bodyparser.json())
 app.use(bodyparser.urlencoded({extended: true}))
-
 
 const authCheck = function (req: any, res: any, next: any) {
   if (req.session.loggedIn) {
@@ -55,7 +71,6 @@ app.get('/metrics/', authCheck, (req: any, res: any) => {
     res.status(200).send(result)
   })
 })
-
 
 app.delete('/metrics/:id', authCheck, (req: any, res: any) => {
  
@@ -114,6 +129,7 @@ authRouter.get('/addMetric', authCheck,(req: any, res: any) => {
 authRouter.get('/deleteMetric', authCheck,(req: any, res: any) => {
   res.render('deleteMetric')
 })
+
 authRouter.post('/addMetric', authCheck,(req: any, res: any, next: any) => {
   let metrics: Metric[] = []
   let met: Metric = new Metric(req.body.timestamp, req.body.value, req.session.user.username )
@@ -155,10 +171,8 @@ app.post('/updatePassword',authCheck, (req: any, res: any, next: any) => {
           result.setPassword(req.body.password1)
           req.session.user.password = req.body.password1
           dbUser.save(req.session.user, function (err: Error | null) {
-    
             if (err) next(err)
-            
-                  })
+          })
       }
     })
       res.redirect('/')
@@ -169,9 +183,7 @@ app.post('/updatePassword',authCheck, (req: any, res: any, next: any) => {
 
 app.use(authRouter)
 const userRouter = express.Router()
-
-
-
+ 
 userRouter.post('/', (req: any, res: any, next: any) => {
   dbUser.get(req.body.username, function (err: Error | null, result?: User) {
     if (!err || result !== undefined) {
@@ -179,9 +191,9 @@ userRouter.post('/', (req: any, res: any, next: any) => {
     } else {
       dbUser.save(req.body, function (err: Error | null) {
 
-if (err) next(err)
+        if (err) next(err)
 
-else res.redirect('/login')
+        else res.redirect('/login')
       })
     }
   })
