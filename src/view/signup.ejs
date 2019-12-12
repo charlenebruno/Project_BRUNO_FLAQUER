@@ -4,32 +4,32 @@
       <% include partials/head %>
   </head>
   <body class="container">
-<div id="form" name="Create your account">
-    <h3>Create your account</h3>
-    <hr/>
-    <form action="/user" method="post">
-      <div class="form-group">
-          <label class="col-sm-3 control-label" for="form_email">Email:</label>
+    <div id="form" name="Create your account">
+      <h3>Create your account</h3>
+      <hr/>
+      <form action="/user" method="post">
+        <div class="form-group">
+            <label class="col-sm-3 control-label" for="form_email">Email:</label>
+            <div class="col-sm-3">
+              <input id="form_email" type="email" name="email" class="form-control" required/>
+            </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-3 control-label" for="form_username">Username:</label>
           <div class="col-sm-3">
-            <input id="form_email" type="email" name="email" class="form-control" required/>
+              <input id="form_username" type="text" name="username" class="form-control" required/>
           </div>
-      </div>
-      <div class="form-group">
-        <label class="col-sm-3 control-label" for="form_username">Username:</label>
-        <div class="col-sm-3">
-            <input id="form_username" type="text" name="username" class="form-control" required/>
         </div>
-      </div>
-      <div class="form-group">
-        <label class="col-sm-3 control-label" for="form_password">Password:</label>
-        <div class="col-sm-3">
-          <input id="form_password" type="password" name="password" class="form-control" required/>
+        <div class="form-group">
+          <label class="col-sm-3 control-label" for="form_password">Password:</label>
+          <div class="col-sm-3">
+            <input id="form_password" type="password" name="password" class="form-control" required/>
+          </div>
         </div>
-      </div>
-      <br>
-      <button class="btn btn-primary btn-block" type="submit" value="Submit" id="submit">Signup</button>
-    </form>
-    <hr/>   
-  </div>
-  </body>
-  </html>
+        <br>
+        <button class="btn btn-primary btn-block" type="submit" value="Submit" id="submit">Sign up</button>
+      </form>
+      <hr/>   
+    </div>
+    </body>
+</html>
