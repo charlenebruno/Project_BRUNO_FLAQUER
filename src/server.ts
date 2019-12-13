@@ -5,7 +5,6 @@ import { MetricsHandler, Metric } from './metrics'
 import session = require('express-session')
 import levelSession = require('level-session-store')
 import { UserHandler, User } from './user'
-import population from './database/populate'
 
 const dbUser: UserHandler = new UserHandler('./db/users')
 const authRouter = express.Router()
@@ -13,32 +12,6 @@ const LevelStore = levelSession(session)
 
 const app = express()
 const port: string = process.env.PORT || '8080'
-
-function savePopulate() {
-  
-  population.forEach(element => 
-    dbUser.get(element.username, function (err: Error | null, result?: User) {
-      if (!err || result !== undefined) {console.log(result)} 
-      else {
-        dbUser.save(element, function (err: Error | null) {
-          if (err) {}
-
-          else {}
-        })
-        element.timestamp.forEach((element2,index) => {
-          let tabMet: Metric[] = []
-          let met: Metric = new Metric(element2,element.value[index],element.username)
-          tabMet.push(met)
-
-          dbMet.save(element.id[index], tabMet, (err: Error | null) => {
-            if (err) throw err
-          })
-        })
-      }
-    }),
-  )
-};
-savePopulate();
 
 app.use(session({
   secret: 'my very secret phrase ',
