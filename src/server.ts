@@ -31,7 +31,7 @@ app.use(bodyparser.urlencoded({extended: true}))
 const authCheck = function (req: any, res: any, next: any) {
   if (req.session.loggedIn) {
     next()
-  } else res.redirect('/login')
+  } else res.redirect('/homePage')
 }
 
 app.get('/', authCheck, (req: any, res: any) => {
@@ -75,6 +75,10 @@ app.post('/deleteMetric', authCheck,(req: any, res: any) => {
   res.status(200).send()
   res.redirect('/')
 
+})
+
+authRouter.get('/homePage', (req: any, res: any) => {
+  res.render('homePage')
 })
 
 authRouter.get('/login', (req: any, res: any) => {
