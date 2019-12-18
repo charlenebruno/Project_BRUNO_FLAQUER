@@ -1,38 +1,36 @@
-
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-      <% include partials/head %>
-  </head>
-  <body class="container">
-    <% include partials/navBar %>
-    <section id="cover">
-        <div id="form">
-          <div class="row text-white">
-            <div class="mx-auto text-center" id="contour">
-              <h3>Please enter the information of the metric you wish to delete</h3>
-              <hr/>
-              <form action="/deleteMetric" method="post">
-                <div class="px-5">
-                  <div class="form-group">
-                    <label class="col-sm-6" for="form_id">ID:</label>
-                    <input id="form_id" type="id" name="id" class="form-control" required/>
-                  </div>
-                  <div class="form-group">
-                      <label class="col-sm-6" for="form_id">Timestamp:</label>
-                      <input id="form_timestamp" type="number" name="timestamp" class="form-control" required/>
-                    </div>
-                  <div class="form-group">
-                    <label class="col-sm-6" for="form_value">Value:</label>
-                    <input id="form_value" type="number" name="value" class="form-control" required/>
-                  </div>
-                  <br>
-                  <button class="btn btn-primary" type="submit" value="Submit">Delete</button>
-                </div>
-              </form>
+
+<head>
+  <% include partials/head %>
+</head>
+
+<body class="container">
+  <% include partials/navBar %>
+  <section id="cover">
+    <div id="form">
+      <div class="row text-white">
+        <div class="mx-auto text-center" id="contour">
+          <h3>Please enter the information of the metric you wish to delete</h3>
+          <hr />
+          <form action="/deleteMetric" method="post">
+            <div class="px-5">
+              <div class="form-group">
+                <label class="col-sm-6" for="form_id">ID:</label>
+                <input id="form_id" type="id" name="id" class="form-control" required />
+              </div>
+              <div class="form-group">
+                <label class="col-sm-6" for="form_id">Timestamp:</label>
+                <input id="form_timestamp" type="number" name="timestamp" class="form-control" required />
+              </div>
+              <br>
+              <button class="btn btn-primary" type="submit" value="Submit">Delete</button>
             </div>
-          </div>
+          </form>
         </div>
-        </section>
-  </body>
+      </div>
+    </div>
+  </section>
+</body>
+
 </html>
