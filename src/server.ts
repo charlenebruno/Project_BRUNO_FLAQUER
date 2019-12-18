@@ -58,20 +58,23 @@ app.delete('/metrics/:id', authCheck, (req: any, res: any) => {
  
     dbMet.get(req.params.id,(err: Error | null, result: any) => {
       if (err) throw err
-      dbMet.deleteId(req.params.id,result, req.params.username)
+      dbMet.deleteId(req.params.id,result, req.params.username, function (err: Error | null ){
+      })
       res.status(200).send()
     })  
 })
 
 app.delete('/metrics/:id/:timestamp/:username', authCheck,(req: any, res: any) => {
  
-  dbMet.deleteOne(req.params.id,req.params.timestamp, req.params.username)
+  dbMet.deleteOne(req.params.id,req.params.timestamp, req.params.username, function (err: Error | null ){
+  })  
   res.status(200).send()
 
 })
 
 app.post('/deleteMetric', authCheck,(req: any, res: any) => {
-  dbMet.deleteOne(req.body.id,req.body.timestamp, req.session.user.username)
+  dbMet.deleteOne(req.body.id,req.body.timestamp, req.session.user.username, function (err: Error | null ){
+  })
   res.status(200).send()
   res.redirect('/')
 
