@@ -5,6 +5,7 @@ import population from './database/population'
 const dbUser: UserHandler = new UserHandler('./db/users')
 const dbMet: MetricsHandler = new MetricsHandler('./db/metrics')
 
+
 population.forEach(element => 
     dbUser.get(element.username, function (err: Error | null, result?: User) {
       if (!err || result !== undefined) {console.log(result)} 
