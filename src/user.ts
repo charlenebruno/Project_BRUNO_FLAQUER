@@ -39,11 +39,16 @@ export class User {
 export class UserHandler {
   public db: any
 
-  public get(username: string, callback: (err: Error | null, result?: User) => void) {
-    this.db.get(`user:${username}`, function (err: Error, data: any) {
-      if (err) callback(err)
-      else if (data === undefined) callback(null, data)
-      else callback(null, User.fromDb(username, data))
+
+  public closeDB(){
+    this.db.close()
+  }
+
+  public get(username: string, callback: (err: Error | null, result:any) => void) {
+    this.db.get(`user:${username}`, function (err: Error, result:any) {
+      if (err) callback(err, null)
+      else if (result === undefined) callback(null, result)
+      else callback(null, User.fromDb(username, result))
     })
   }
 
