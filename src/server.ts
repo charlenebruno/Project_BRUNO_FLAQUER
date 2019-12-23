@@ -139,9 +139,11 @@ app.listen(port, (err: Error) => {
 
 app.post('/login', (req: any, res: any, next: any) => {
   dbUser.get(req.body.username, (err: Error | null, result?: User) => {
-    if (err) next(err)
+    
+    if (err && result !== undefined) next(err)
     if (result === undefined || !result.validatePassword(req.body.password)) {
       res.redirect('/login')
+
     } else {
       req.session.loggedIn = true
       req.session.user = result
