@@ -12,9 +12,9 @@ export class User {
     this.email = email
 
     if (!passwordHashed) {
-      console.log("PSK")
+      /*console.log("PSK")
       this.hashedPassword(password)
-      console.log("PK ??? ", password, " putain ", this.getPassword())
+      console.log("PK ??? ", password, " putain ", this.getPassword())*/
     }
     else {
       this.setPassword(password)
@@ -27,16 +27,19 @@ export class User {
     return new User(username, email, password)
   }
 
-  public hashedPassword(toHash): void {
+  public async hashedPassword(toHash: string) {
 
-    const password = toHash
+    var password = toHash
     const saltRounds = 10;
 
-
-    bcrypt.hash(password, saltRounds, (err, hash: string) => {
-      console.log("allo", hash)
-      if (!err)  this.password = hash;
-    });
+    const hashedPassword = await new Promise<string>((resolve, reject) => {
+      bcrypt.hash(password, saltRounds, function(err, hash) {
+        if (err) reject(err)
+        resolve(hash)
+      });
+    })
+    console.log("allo", hashedPassword)
+    this.password = hashedPassword
   }
 
   public setPassword(toSet: string): void {
@@ -78,13 +81,18 @@ export class UserHandler {
     })
   }
 
-  public save(bodyreq: any, callback: (err: Error | null) => void) {
+  public async save(bodyreq: any, callback: (err: Error | null) => void) {
     var user = new User(bodyreq.username, bodyreq.email, bodyreq.password, false)
 
     console.log("holaaaaaaaaa")
+
+    await user.hashedPassword(bodyreq.password)
+    console.log("bla",user.getPassword())
     this.db.put(`user:${user.username}`, `${user.getPassword()}:${user.email}`, (err: Error | null) => {
+      console.log(`${user.getPassword()}:${user.email}`)
       callback(err)
     })
+    console.log("adioooos")
   }
 
   public delete(userDel: any, callback: (err: Error | null) => void) {
