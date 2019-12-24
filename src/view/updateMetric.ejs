@@ -12,17 +12,17 @@
             <div class="mx-auto text-center" id="contour">
                 <h3>Enter the key of the metric you want to update</h3>
               <hr/>
-              <form action="/updzteMetric" method="post">
+              <form action="/updateMetric" method="post">
                 <div class="px-5">
                   <div class="form-group">
                     <label class="col-sm-6" for="form_id">ID:</label>
                     <input id="form_id" type="id" name="id" class="form-control" required/>
-                  </div>
-                  <h3>Please enter the new information of your  metric</h3>
+                  </div> 
                   <div class="form-group">
                       <label class="col-sm-6" for="form_id">Timestamp:</label>
                       <input id="form_timestamp" type="number" name="timestamp" class="form-control" required/>
-                    </div>
+                </div>
+                  <h3>Please enter the new value for your  metric</h3>
                   <div class="form-group">
                     <label class="col-sm-6" for="form_value">Value:</label>
                     <input id="form_value" type="number" name="value" class="form-control" required/>

@@ -136,13 +136,13 @@ authRouter.post('/addMetric', authCheck,(req: any, res: any, next: any) => {
 })
 
 authRouter.post('/updateMetric', authCheck,(req: any, res: any, next: any) => {
-  /*let metrics: Metric[] = []
+  let metrics: Metric[] = []
   let met: Metric = new Metric(req.body.timestamp, req.body.value, req.session.user.username )
   metrics.push(met)
   dbMet.save(req.body.id, metrics, (err: Error | null) => {
     if (err) throw err
     res.status(200).send()
-  })*/
+  })
   res.redirect('/')
 })
 
