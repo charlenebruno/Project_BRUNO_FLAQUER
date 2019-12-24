@@ -80,6 +80,7 @@ app.post('/deleteMetric', authCheck,(req: any, res: any) => {
 
 })
 
+
 authRouter.get('/homePage', (req: any, res: any) => {
   res.render('homePage')
 })
@@ -115,11 +116,26 @@ authRouter.get('/addMetric', authCheck,(req: any, res: any) => {
   res.render('addMetric')
 })
 
+authRouter.get('/updateMetric', authCheck,(req: any, res: any) => {
+  res.render('updateMetric')
+})
+
 authRouter.get('/deleteMetric', authCheck,(req: any, res: any) => {
   res.render('deleteMetric')
 })
 
 authRouter.post('/addMetric', authCheck,(req: any, res: any, next: any) => {
+  let metrics: Metric[] = []
+  let met: Metric = new Metric(req.body.timestamp, req.body.value, req.session.user.username )
+  metrics.push(met)
+  dbMet.save(req.body.id, metrics, (err: Error | null) => {
+    if (err) throw err
+    res.status(200).send()
+  })
+  res.redirect('/')
+})
+
+authRouter.post('/updateMetric', authCheck,(req: any, res: any, next: any) => {
   let metrics: Metric[] = []
   let met: Metric = new Metric(req.body.timestamp, req.body.value, req.session.user.username )
   metrics.push(met)
@@ -203,7 +219,7 @@ userRouter.get('/:username', authCheck,(req: any, res: any, next: any) => {
   })
 })
 
-app.use('/user', userRouter)
+app.use('/user', userRouter )
 
 
 
