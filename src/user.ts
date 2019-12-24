@@ -15,19 +15,19 @@ export class User {
       this.setPassword(password)
     }
     else {
-      this.password=password
+      this.password = password
     }
 
   }
   static fromDb(username: string, value: any): User {
     const [password, email] = value.split(":")
-    return new User(username, email, password,true)
+    return new User(username, email, password, true)
   }
 
   public setPassword(toSet: string): void {
-    const hashedPassword : string = crypto.createHash('md5').update(toSet).digest('hex');
+    const hashedPassword: string = crypto.createHash('md5').update(toSet).digest('hex');
 
-    this.password=hashedPassword;
+    this.password = hashedPassword;
   }
 
   public getPassword(): string {
@@ -36,7 +36,7 @@ export class User {
 
   public validatePassword(toValidate: string): boolean {
     // return comparison with hashed password
-    const hashedValidate : string = crypto.createHash('md5').update(toValidate).digest('hex');
+    const hashedValidate: string = crypto.createHash('md5').update(toValidate).digest('hex');
 
     return (this.password === hashedValidate);
   }
@@ -45,7 +45,7 @@ export class User {
 export class UserHandler {
   public db: any
 
-  public closeDB(){
+  public closeDB() {
     this.db.close()
   }
 
@@ -53,8 +53,8 @@ export class UserHandler {
     this.db = LevelDB.open(path)
   }
 
-  public get(username: string, callback: (err: Error | null, result:any) => void) {
-    this.db.get(`user:${username}`, function (err: Error, result:any) {
+  public get(username: string, callback: (err: Error | null, result: any) => void) {
+    this.db.get(`user:${username}`, function (err: Error, result: any) {
       if (err) callback(err, null)
       else if (result === undefined) callback(null, result)
       else callback(null, User.fromDb(username, result))
@@ -71,7 +71,6 @@ export class UserHandler {
   }
 
   public delete(userDel: any, callback: (err: Error | null) => void) {
-    console.log("delete")
     var user = new User(userDel.username, userDel.email, userDel.password, false)
     this.db.del(`user:${user.username}`, `${user.getPassword()}:${user.email}`, (err: Error | null) => {
       callback(err)

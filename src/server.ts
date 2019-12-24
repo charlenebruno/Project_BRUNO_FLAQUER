@@ -26,7 +26,7 @@ app.set('views', __dirname + "/view")
 app.set('view engine', 'ejs');
 
 app.use(bodyparser.json())
-app.use(bodyparser.urlencoded({extended: true}))
+app.use(bodyparser.urlencoded({ extended: true }))
 
 const authCheck = function (req: any, res: any, next: any) {
   if (req.session.loggedIn) {
@@ -40,7 +40,7 @@ app.get('/', authCheck, (req: any, res: any) => {
 
 const dbMet: MetricsHandler = new MetricsHandler('./db/metrics')
 
-app.post('/metrics/:id',authCheck, (req: any, res: any) => {
+app.post('/metrics/:id', authCheck, (req: any, res: any) => {
   dbMet.save(req.params.id, req.body, (err: Error | null) => {
     if (err) throw err
     res.status(200).send()
@@ -48,32 +48,32 @@ app.post('/metrics/:id',authCheck, (req: any, res: any) => {
 })
 
 app.get('/metrics/', authCheck, (req: any, res: any) => {
-  dbMet.getAllMyMetrics(req.session.user.username,(err: Error | null, result: any) => {
+  dbMet.getAllMyMetrics(req.session.user.username, (err: Error | null, result: any) => {
     if (err) throw err
     res.status(200).send(result)
   })
 })
 
 app.delete('/metrics/:id', authCheck, (req: any, res: any) => {
- 
-    dbMet.get(req.params.id,(err: Error | null, result: any) => {
-      if (err) throw err
-      dbMet.deleteId(req.params.id,result, req.params.username, function (err: Error | null ){
-      })
-      res.status(200).send()
-    })  
+
+  dbMet.get(req.params.id, (err: Error | null, result: any) => {
+    if (err) throw err
+    dbMet.deleteId(req.params.id, result, req.params.username, function (err: Error | null) {
+    })
+    res.status(200).send()
+  })
 })
 
-app.delete('/metrics/:id/:timestamp/:username', authCheck,(req: any, res: any) => {
- 
-  dbMet.deleteOne(req.params.id,req.params.timestamp, req.params.username, function (err: Error | null ){
-  })  
+app.delete('/metrics/:id/:timestamp/:username', authCheck, (req: any, res: any) => {
+
+  dbMet.deleteOne(req.params.id, req.params.timestamp, req.params.username, function (err: Error | null) {
+  })
   res.status(200).send()
 
 })
 
-app.post('/deleteMetric', authCheck,(req: any, res: any) => {
-  dbMet.deleteOne(req.body.id,req.body.timestamp, req.session.user.username, function (err: Error | null ){
+app.post('/deleteMetric', authCheck, (req: any, res: any) => {
+  dbMet.deleteOne(req.body.id, req.body.timestamp, req.session.user.username, function (err: Error | null) {
   })
   res.status(200).send()
   res.redirect('/')
@@ -103,7 +103,7 @@ authRouter.get('/logout', authCheck, (req: any, res: any) => {
   res.redirect('/login')
 })
 
-authRouter.get('/delete', authCheck, (req: any, res: any, next:any) => {
+authRouter.get('/delete', authCheck, (req: any, res: any, next: any) => {
   dbUser.delete(req.session.user, (err: Error | null, result?: User) => {
     if (err) next(err)
   })
@@ -112,21 +112,21 @@ authRouter.get('/delete', authCheck, (req: any, res: any, next:any) => {
   res.redirect('/login')
 })
 
-authRouter.get('/addMetric', authCheck,(req: any, res: any) => {
+authRouter.get('/addMetric', authCheck, (req: any, res: any) => {
   res.render('addMetric')
 })
 
-authRouter.get('/updateMetric', authCheck,(req: any, res: any) => {
+authRouter.get('/updateMetric', authCheck, (req: any, res: any) => {
   res.render('updateMetric')
 })
 
-authRouter.get('/deleteMetric', authCheck,(req: any, res: any) => {
+authRouter.get('/deleteMetric', authCheck, (req: any, res: any) => {
   res.render('deleteMetric')
 })
 
-authRouter.post('/addMetric', authCheck,(req: any, res: any, next: any) => {
+authRouter.post('/addMetric', authCheck, (req: any, res: any, next: any) => {
   let metrics: Metric[] = []
-  let met: Metric = new Metric(req.body.timestamp, req.body.value, req.session.user.username )
+  let met: Metric = new Metric(req.body.timestamp, req.body.value, req.session.user.username)
   metrics.push(met)
   dbMet.save(req.body.id, metrics, (err: Error | null) => {
     if (err) throw err
@@ -135,9 +135,9 @@ authRouter.post('/addMetric', authCheck,(req: any, res: any, next: any) => {
   res.redirect('/')
 })
 
-authRouter.post('/updateMetric', authCheck,(req: any, res: any, next: any) => {
+authRouter.post('/updateMetric', authCheck, (req: any, res: any, next: any) => {
   let metrics: Metric[] = []
-  let met: Metric = new Metric(req.body.timestamp, req.body.value, req.session.user.username )
+  let met: Metric = new Metric(req.body.timestamp, req.body.value, req.session.user.username)
   metrics.push(met)
   dbMet.save(req.body.id, metrics, (err: Error | null) => {
     if (err) throw err
@@ -155,47 +155,46 @@ app.listen(port, (err: Error) => {
 
 app.post('/login', (req: any, res: any, next: any) => {
   dbUser.get(req.body.username, (err: Error | null, result?: User) => {
-  
-    if(result !== undefined && result !== null && result.validatePassword(req.body.password))
-    {
+
+    if (result !== undefined && result !== null && result.validatePassword(req.body.password)) {
       req.session.loggedIn = true
       req.session.user = result
       res.redirect('/')
     }
     else {
       res.redirect('/login')
-    } 
+    }
   })
 })
 
-app.post('/updatePassword',authCheck, (req: any, res: any, next: any) => { 
-  if (req.body.password1 === req.body.password2 ) {
-  dbUser.get(req.session.user.username, (err: Error | null, result?: User) => {
-    if (err) next(err) 
+app.post('/updatePassword', authCheck, (req: any, res: any, next: any) => {
+  if (req.body.password1 === req.body.password2) {
+    dbUser.get(req.session.user.username, (err: Error | null, result?: User) => {
+      if (err) next(err)
       if (err || result === undefined) {
         res.status(404).send("user not found")
       } else {
-          result.setPassword(req.body.password1)
-          
-          req.session.user.password = req.body.password1
-          dbUser.save(req.session.user, function (err: Error | null) {
-            if (err) next(err)
-          })
+        result.setPassword(req.body.password1)
+
+        req.session.user.password = req.body.password1
+        dbUser.save(req.session.user, function (err: Error | null) {
+          if (err) next(err)
+        })
       }
     })
-      res.redirect('/')
-    }else{
-      res.redirect('/updatePassword') 
-    } 
-  })
+    res.redirect('/')
+  } else {
+    res.redirect('/updatePassword')
+  }
+})
 
 app.use(authRouter)
 const userRouter = express.Router()
- 
+
 userRouter.post('/', (req: any, res: any, next: any) => {
   dbUser.get(req.body.username, function (err: Error | null, result?: User) {
     if (!err && result !== undefined) {
-     res.status(409).send("user already exists")
+      res.status(409).send("user already exists")
     } else {
       dbUser.save(req.body, function (err: Error | null) {
 
@@ -207,7 +206,7 @@ userRouter.post('/', (req: any, res: any, next: any) => {
   })
 })
 
-userRouter.get('/:username', authCheck,(req: any, res: any, next: any) => {
+userRouter.get('/:username', authCheck, (req: any, res: any, next: any) => {
   dbUser.get(req.params.username, function (err: Error | null, result?: User) {
     if (err || result === undefined) {
       res.status(404).send("user not found")
@@ -215,7 +214,7 @@ userRouter.get('/:username', authCheck,(req: any, res: any, next: any) => {
   })
 })
 
-app.use('/user', userRouter )
+app.use('/user', userRouter)
 
 
 

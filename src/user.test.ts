@@ -29,14 +29,9 @@ describe('Users', function () {
     describe('#save', function () {
         it('should save data', function (done) {
             var user = new User("charlene", "charlene.bruno@edu.ece.fr", "ECE", true)
-            console.log("user1 ", user)
             dbUse.save(user, function (err: Error | null) {
                 expect(user).to.not.be.empty
-                console.log("user2 ", user)
                 dbUse.get("charlene", function (err: Error | null, result?: User) {
-                    console.log("user3 ", user)
-                    console.log("result ", result)
-
                     expect(err).to.be.null
                     expect(result).to.not.be.null
                     if (result) {
