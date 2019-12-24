@@ -16,62 +16,68 @@ describe('Metrics', function () {
 
 
   describe('#get', function () {
-    it('should get empty array on non existing group', function () {
+    it('should get empty array on non existing group', function (done) {
       dbMet.get(0, function (err: Error | null, result?: Metric[]) {
+        console.log(err)
         expect(err).to.be.null
         expect(result).to.not.be.undefined
         expect(result).to.be.empty
+        done()
       })
     })
   })
 
   describe('#save', function () {
-    it('should save data', function () {
-      var met: Metric[] = []
-      met.push(new Metric("1111111", 10, "charlene"))
-      dbMet.save(1, met, function(err: Error | null){
-        expect(met).to.not.be.empty
-        dbMet.get(1, function(err: Error | null, result?: Metric[]){
-          expect(err).to.be.null
-          expect(result).to.be.undefined
-          expect(result).to.not.be.empty
-          if (result)
-            expect(result[0].value).to.equal(10)
+    it('should save data', function (done) {
+        var met: Metric[] = []
+        met.push(new Metric("1111111", 10, "charlene"))
+        dbMet.save(1, met, function (err: Error | null) {
+          expect(met).to.not.be.empty
+          dbMet.get(1, function (err: Error | null, result?: Metric[]) {
+            expect(err).to.be.null
+            expect(result).to.not.be.empty
+            if (result) {
+              expect(result[0].value).to.equal(10)
+            }
+
+            done()
+          })
         })
-      })
     })
 
-    it('should update existing data', function () {
-      var met: Metric[] = []
-      met.push(new Metric("1111111", 20, "charlene"))
-      dbMet.save(1, met, function(err: Error | null){
-        expect(met).to.not.be.empty
-        dbMet.get(1, function(err: Error | null, result?: Metric[]){
-          expect(err).to.be.null
-          expect(result).to.be.undefined
-          expect(result).to.not.be.empty
-          if (result)
-            expect(result[0].value).to.equal(20)
-        })
-      })
-    })
-  })
-
-  describe('#deleteOne', function () {
-    it('should delete data', function () {
-      dbMet.deleteOne(1,"1111111", "charlene")
-        dbMet.get(1, function(err: Error | null, result?: Metric[]){
+    it('should update existing data', function (done) {
+        dbMet.get(1, function (err: Error | null, result?: Metric[]) {
           expect(err).to.be.null
           expect(result).to.not.be.undefined
-          expect(result).to.be.empty
+          expect(result).to.not.be.empty    
+          if (result) {
+            result[0].value = 20
+            expect(result[0].value).to.equal(20)
+          }
+          done()
         })
-      dbMet.deleteOne(1,"1111111", "charlene")  
+      })
     })
-    it('should  not fail if data does not exist', function () {
-      dbMet.deleteOne(1,"1111111", "charlene")  
+
+  describe('#deleteOne', function () {
+    it('should delete data', function (done) {
+      dbMet.deleteOne(1, "1111111", "charlene", function (err: Error | null) {
+        dbMet.get(1, function (err: Error | null, result?: Metric[]) {
+          expect(err).to.be.null
+          expect(result).to.be.empty
+          done()
+        })
+      })
+    })
+    it('should  not fail if data does not exist', function (done) {
+      dbMet.deleteOne(1, "1111111", "charlene", function (err: Error | null) {
+        expect(err).to.be.null
+        done()
+      })
     })
   })
 })
+
 
 
 

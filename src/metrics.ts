@@ -113,14 +113,28 @@ export class Metric {
       }) 
     }
 
-    public deleteId(key: number, data: any, username:any) {
+    public deleteId(key: number, data: any, username:any, callback: (error: Error | null) => void) {
       for(let i=0; i<data.length; i++)
       {
         this.db.del(`metrics:${key}:${data[i].timestamp}:${username}`)
       }
+
+      callback(null)
     }
 
-    public deleteOne(key: number, timestamp: any, username:any) {
-      this.db.del(`metrics:${key}:${timestamp}:${username}`)
+    public deleteOne(key: number, timestamp: any, username:any,  callback: (error: Error | null)=> void) {
+      
+      var batch = this.db.batch();    
+      batch.del(`metrics:${key}:${timestamp}:${username}`)    
+      batch.write(function(err) {    
+        if (err) {  
+          console.error('batch operation failed:', err);  
+          callback(err)
+        }  else 
+          callback(null)
+
+      });
+      
     }
+   
   }
