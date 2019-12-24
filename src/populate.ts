@@ -7,7 +7,7 @@ const dbMet: MetricsHandler = new MetricsHandler('./db/metrics')
 
 population.forEach(element => 
     dbUser.get(element.username, function (err: Error | null, result?: User) {
-      if (!err || result !== undefined) {console.log(result)} 
+      if (!err) {console.log(result)} 
       else {
         dbUser.save(element, function (err: Error | null) {
           if (err) {}
