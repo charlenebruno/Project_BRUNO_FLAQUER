@@ -181,6 +181,7 @@ app.post('/updatePassword',authCheck, (req: any, res: any, next: any) => {
         res.status(404).send("user not found")
       } else {
           result.setPassword(req.body.password1)
+          
           req.session.user.password = req.body.password1
           dbUser.save(req.session.user, function (err: Error | null) {
             if (err) next(err)

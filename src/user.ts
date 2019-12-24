@@ -1,40 +1,46 @@
 import { LevelDB } from "./leveldb"
 import WriteStream from 'level-ws'
+import crypto from 'crypto'
 
 export class User {
-    public username: string
-    public email: string
-    private password: string = ""
-  
-    constructor(username: string, email: string, password: string, passwordHashed: boolean = false) {
-      this.username = username
-      this.email = email
-  
-      if (!passwordHashed) {
-        this.setPassword(password)
-      } else this.password = password
+  public username: string
+  public email: string
+  private password: string = ""
+
+  constructor(username: string, email: string, password: string, passwordHashed: boolean = false) {
+    this.username = username
+    this.email = email
+
+    if (!passwordHashed) {
+      this.setPassword(password)
     }
-    static fromDb(username: string, value: any): User {
-        const [password, email] = value.split(":")
-        return new User(username, email, password)
-      }
-    
-      public setPassword(toSet: string): void {
-        // Hash and set password
-        this.password= toSet;
-      }
-    
-      public getPassword(): string {
-        return this.password
-      }
-    
-      public validatePassword(toValidate: String): boolean {
-        // return comparison with hashed password
-        return (this.password === toValidate);
-      }
-    }  
+    else {
+      this.password=password
+    }
 
+  }
+  static fromDb(username: string, value: any): User {
+    const [password, email] = value.split(":")
+    return new User(username, email, password,true)
+  }
 
+  public setPassword(toSet: string): void {
+    const hashedPassword : string = crypto.createHash('md5').update(toSet).digest('hex');
+
+    this.password=hashedPassword;
+  }
+
+  public getPassword(): string {
+    return this.password
+  }
+
+  public validatePassword(toValidate: string): boolean {
+    // return comparison with hashed password
+    const hashedValidate : string = crypto.createHash('md5').update(toValidate).digest('hex');
+
+    return (this.password === hashedValidate);
+  }
+}
 
 export class UserHandler {
   public db: any
@@ -51,23 +57,21 @@ export class UserHandler {
     })
   }
 
-  public save(bodyreq:any, callback: (err: Error | null) => void) {
-    var user = new User(bodyreq.username, bodyreq.email, bodyreq.password,false)
+  public save(bodyreq: any, callback: (err: Error | null) => void) {
+    var user = new User(bodyreq.username, bodyreq.email, bodyreq.password, false)
+
     this.db.put(`user:${user.username}`, `${user.getPassword()}:${user.email}`, (err: Error | null) => {
+
       callback(err)
     })
   }
 
- public delete(userDel: any, callback: (err: Error | null) => void) {
+  public delete(userDel: any, callback: (err: Error | null) => void) {
     console.log("delete")
-    var user = new User(userDel.username, userDel.email, userDel.password,false)
-     this.db.del(`user:${user.username}`, `${user.getPassword()}:${user.email}`, (err: Error | null) => {
+    var user = new User(userDel.username, userDel.email, userDel.password, false)
+    this.db.del(`user:${user.username}`, `${user.getPassword()}:${user.email}`, (err: Error | null) => {
       callback(err)
     })
   }
 
-  constructor(path: string) {
-    this.db = LevelDB.open(path)
-  }
 }
-
