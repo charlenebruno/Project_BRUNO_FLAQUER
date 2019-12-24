@@ -49,6 +49,10 @@ export class UserHandler {
     this.db.close()
   }
 
+  constructor(path: string) {
+    this.db = LevelDB.open(path)
+  }
+
   public get(username: string, callback: (err: Error | null, result:any) => void) {
     this.db.get(`user:${username}`, function (err: Error, result:any) {
       if (err) callback(err, null)
