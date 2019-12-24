@@ -2,7 +2,10 @@
 
 ## Introduction
 
-This project is a simple web API with a dashboard.
+This project is a simple web API with a dashboard. It is available on this link:
+http://localhost:8080/
+
+The main objective of this project is to understand the link between pages thanks to routes and how they communicate to exchange data.
 
 ## Installation instructions
 
@@ -14,6 +17,16 @@ If you want to use this project you should clone the git repository, then type t
 	1) sign In, sign Up, sign Out for a user
 
 	2) add/delete/update/display metrics 
+
+## examples  of use
+
+### to test features on user
+
+You can add a user thanks to Sign Up page and then log in with the Sign In page. You can also modify your password thanks to the tool bar or even delete your account or just log out.
+
+### to test features on metric
+
+Once your are connected, thanks to the buttons on the session page, you can display, update, add or delete some metrics.
 
 ## routes
 
@@ -43,14 +56,19 @@ If you want to use this project you should clone the git repository, then type t
 
 ## parameters
 
-id: the id of the concerned metric
-timestamp: the timesstamp of the concerned metric
-username: the username of the current user
+Using routes, sometimes we pass parameters in the link:
+
+- id: the id of the concerned metric
+- timestamp: the timesstamp of the concerned metric
+- username: the username of the current user
 
 ## authorization
 
-We usually use "authCheck" to check if the current user's session is allowed to achieve the desired action
+We usually use "authCheck" to check if the current user's session is allowed to achieve the desired action.
 
+## technical mention
+
+This project was developed in the windows os's environment.
 
 ## List of contributors
 
