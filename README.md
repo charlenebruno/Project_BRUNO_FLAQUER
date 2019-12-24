@@ -25,6 +25,8 @@ If you want to use this project you should clone the git repository, then type t
 /signup (GET): render the sign up page
 /addMetric (GET): render the page to add a metric (session required)
 /addMetric (POST): add a metric wih the properties entered in the form (session required)
+/updateMetric (GET): render the page to update a specific metric (session required)
+/updateMetric (POST): update the value of a specific metric (session required)
 /deleteMetric (GET): render the page to delete a metric (session required)
 /logout(GET): log out the user and render the login page (session required)
 /updatePassword (GET): render the page to change our password(session required)
@@ -41,8 +43,13 @@ If you want to use this project you should clone the git repository, then type t
 
 ## parameters
 
+id: the id of the concerned metric
+timestamp: the timesstamp of the concerned metric
+username: the username of the current user
 
+## authorization
 
+We usually use "authCheck" to check if the current user's session is allowed to achieve the desired action
 
 
 ## List of contributors
