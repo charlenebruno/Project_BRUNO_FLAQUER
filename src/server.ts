@@ -141,10 +141,15 @@ app.post('/login', (req: any, res: any, next: any) => {
   dbUser.get(req.body.username, (err: Error | null, result?: User) => {
     
     if (err && result !== undefined) next(err)
-    if (result === undefined || !result.validatePassword(req.body.password)) {
+    if (result === undefined) {
       res.redirect('/login')
 
-    } else {
+    }/*else if(result!== null){
+      if(!result.validatePassword(req.body.password)){
+        res.redirect('/login')
+      }
+      
+    } */else {
       req.session.loggedIn = true
       req.session.user = result
       res.redirect('/')
@@ -177,7 +182,7 @@ const userRouter = express.Router()
  
 userRouter.post('/', (req: any, res: any, next: any) => {
   dbUser.get(req.body.username, function (err: Error | null, result?: User) {
-    if (!err || result !== undefined) {
+    if (!err && result !== undefined) {
      res.status(409).send("user already exists")
     } else {
       dbUser.save(req.body, function (err: Error | null) {
