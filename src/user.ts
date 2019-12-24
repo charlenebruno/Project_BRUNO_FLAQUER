@@ -39,7 +39,6 @@ export class User {
 export class UserHandler {
   public db: any
 
-
   public closeDB(){
     this.db.close()
   }
@@ -65,7 +64,6 @@ export class UserHandler {
      this.db.del(`user:${user.username}`, `${user.getPassword()}:${user.email}`, (err: Error | null) => {
       callback(err)
     })
-    
   }
 
   constructor(path: string) {
